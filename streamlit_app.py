@@ -1,6 +1,5 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-import numpy as np
+import plotly.graph_objects as go
 import pandas as pd
 
 def main():
@@ -17,20 +16,16 @@ def main():
 
     if x_values_list and y_values_list:
         data = {'X axis': x_values_list, 'Y axis': y_values_list}
-        df = pd.DataFrame(data) #dataframe is a streamlit component
+        df = pd.DataFrame(data) #dataframe a streamlit component
         st.write(df)
 
     if st.button("Plot Graph"):
         try:
-            # Plot the graph
-            fig, ax = plt.subplots(figsize=(8, 6))
-            ax.plot(x_values_list, y_values_list, 'o-', color='#2563eb', label="Data Points")
-            ax.set_xlabel("$x$ $axis$", fontsize=14)
-            ax.set_ylabel("$y$ $axis$", fontsize=14)
-            ax.set_title("Your Graph")
-            ax.grid(True)
-            ax.legend()
-            st.pyplot(fig)
+            # Plot the graph using Plotly / can also use mayplotlib but for some reason it is giving error while hosting it on streamlit
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=x_values_list, y=y_values_list, line=dict(color='#7c3aed', width=2), mode='lines+markers', name='Data Points'))
+            fig.update_layout(title='Your Graph', xaxis_title='X axis', yaxis_title='Y axis')
+            st.plotly_chart(fig)
 
         except ValueError:
             st.error("Please enter valid numerical values.")
